@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" rx="24" fill="#0f1722" stroke="#1f2f44"/>
+  <g font-family="Courier New, monospace" font-size="14" fill="#ffb347">
+    <text x="32" y="60">import json</text>
+    <text x="32" y="90">from datetime import datetime</text>
+    <text x="32" y="120">def parse_logs(path):</text>
+    <text x="64" y="150">with open(path) as f:</text>
+    <text x="96" y="180">return [json.loads(l) for l in f]</text>
+    <text x="32" y="210">events = parse_logs('alerts.json')</text>
+    <text x="32" y="240">print(f"alerts: {len(events)}")</text>
+  </g>
+  <rect x="32" y="270" width="300" height="14" rx="7" fill="#1f2f44"/>
+  <rect x="32" y="270" width="220" height="14" rx="7" fill="#15d1b0"/>
+</svg>

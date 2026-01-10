@@ -1,0 +1,14 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <rect width="640" height="360" rx="24" fill="#05080d" stroke="#1f2f44"/>
+  <g font-family="Courier New, monospace" font-size="14" fill="#7ee2d7">
+    <text x="32" y="60">$ ssh analyst@secure-gateway</text>
+    <text x="32" y="90">Authenticating... ok</text>
+    <text x="32" y="120">Deploying firewall policy v3.2</text>
+    <text x="32" y="150">- Validating ACLs...</text>
+    <text x="32" y="180">- Pushing to edge nodes...</text>
+    <text x="32" y="210">- Monitoring flow logs...</text>
+    <text x="32" y="240">Status: hardened and verified</text>
+  </g>
+  <rect x="32" y="260" width="260" height="14" rx="7" fill="#1f2f44"/>
+  <rect x="32" y="260" width="200" height="14" rx="7" fill="#15d1b0"/>
+</svg>
