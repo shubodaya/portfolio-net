@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import shieldIcon from './assets/shield.svg'
-import siemDashboard from './assets/siem-dashboard-hero.jpg'
+import heroBg from './assets/data3.jpg'
 import networkNodes from './assets/network-nodes.svg'
 import networkTopology from './assets/network-topology.webp'
 import certBadges from './assets/cert-badges.svg'
@@ -17,35 +17,69 @@ const experience = [
     company: 'Itarmi IT Services',
     location: 'United Kingdom',
     dates: 'May 2025 - Present',
+    tags: ['NOC Escalations', 'Routing & Switching', 'LAN/WAN Support'],
+    achievements: [
+      'Resolved 25+ incidents across on-site and remote engagements.',
+      'Delivered clean change records and customer-ready completion reports.',
+      'Maintained steady SLA adherence across priority tickets.',
+    ],
     highlights: [
-      'Resolved 25+ on-site and remote incidents focused on availability, access, and secure connectivity.',
-      'Delivered secure network infrastructure support for routers, switches, and access points.',
+      'Delivered network infrastructure support for routers, switches, and access points.',
       'Coordinated escalations with NOC and engineering teams to isolate and resolve access issues.',
-      'Produced clear documentation and completion reports for auditability and customer updates.',
+      'Troubleshot LAN/WAN connectivity issues, validating cabling, ports, and post-change stability.',
     ],
   },
   {
-    role: 'Senior Technical Support Engineer',
+    role: 'Technical Support Engineer',
     company: 'SonicWall Technologies',
     location: 'Bangalore, India',
     dates: 'May 2021 - Aug 2023',
+    tags: ['P1-P3 Incidents', 'VPN/SD-WAN', 'HA & Failover'],
+    achievements: [
+      'Resolved 1,800+ cases annually and authored 20+ knowledge base articles.',
+      'Launched live chat support with Development and Salesforce teams.',
+      'Earned three Spot Awards; SNSA & SNSP certified.',
+    ],
     highlights: [
-      'Owned P1-P3 incidents in a 24x7 enterprise security environment, meeting global SLAs.',
-      'Delivered threat hunting, monitoring, and compliance reporting using SonicWall Analytics and CSC.',
-      'Configured App Control, Content Filtering, IPS, GAV, Anti-Spam, DPI, and CATP to reduce attack surface.',
-      'Designed and troubleshot firewalls, VPNs, HA, SD-WAN, OSPF/BGP, NAT, and ACLs.',
-      'Integrated IPSec VPNs with Cisco, FortiGate, Azure, and AWS; supported LDAP/RADIUS and MFA.',
-      'Investigated CVEs, reproduced defects, coordinated hotfixes, and processed RMAs.',
+      'Delivered 2nd/3rd line network support, resolving P1-P3 incidents within SLA targets.',
+      'Troubleshot LAN, WAN, VPN, and data-center connectivity issues across large customer networks.',
+      'Configured firewall policies, NAT, ACLs, routing, switching, and SD-WAN in live environments.',
+      'Supported multi-site connectivity with OSPF/BGP and cloud interoperability.',
+      'Implemented IPSec VPNs, WAN load balancing, and HA failover for multi-site customers, validating tunnels and failover behavior during maintenance windows.',
+      'Diagnosed service degradation by analyzing logs, packet captures, and traffic flows, restoring stability after routing and VPN changes.',
+      'Integrated AD and Azure AD using LDAP/RADIUS, enabling MFA across LAN, VLANs, and SSL VPN with consistent access policies.',
+      'Maintained monitoring and alerting in SonicWall Analytics and PRTG, tuning thresholds and dashboards for availability and performance.',
+      'Delivered zero-touch mass deployment via SonicWall CSC, standardizing templates and fleet-wide configuration updates.',
+      'Investigated firmware and hardware defects, reproduced issues in lab environments, and coordinated hotfixes and RMAs with engineering.',
+      'Mentored junior engineers and ensured clear handovers during high-impact incidents.',
     ],
   },
 ]
 
 const projects = [
   {
-    title: 'Cloud SOC Lab in Azure',
+    title: 'Network Lab Build (Cisco + EVE-NG)',
     year: '2025',
     detail:
-      'Deployed a Windows VM with security controls disabled to capture real-world attack traffic and ingest logs into Microsoft Sentinel.',
+      'Built scalable labs for deployment and troubleshooting across Cisco and enterprise firewalls.',
+  },
+  {
+    title: 'Home Lab: Core Network Services',
+    year: '2024',
+    detail:
+      'Deployed Windows/Linux servers for DNS, DHCP, AD, file, and web services with stable LAN design.',
+  },
+  {
+    title: 'Cloud Network Lab in Azure',
+    year: '2025',
+    detail:
+      'Built Azure networks with VMs to capture traffic and analyze logs in Microsoft Sentinel.',
+  },
+  {
+    title: 'Automated Log Analyzer (Python)',
+    year: '2024',
+    detail:
+      'Parsed local and remote logs, detected events, triggered alerts, and stored incident data in SQL and CSV.',
   },
   {
     title: 'OWASP Top 10 + WAF Validation',
@@ -54,84 +88,66 @@ const projects = [
       'Simulated common web attacks against DVWA and validated detection and prevention using a WAF.',
   },
   {
-    title: 'Automated Log Analyzer (Python)',
+    title: 'Automotive Network Security Dissertation',
     year: '2024',
     detail:
-      'Parsed local and remote logs, detected security events, triggered alerts, and stored incident data in SQL and CSV.',
-  },
-  {
-    title: 'Automotive Cybersecurity Dissertation',
-    year: '2024',
-    detail:
-      'Led TARA aligned with ISO 21434 and proposed a distributed software-defined firewall for in-vehicle networks.',
-  },
-  {
-    title: 'Security Audit and Risk Remediation',
-    year: '2024',
-    detail:
-      'Benchmarked a simulated organization against PCI DSS, GDPR, and SOC standards with risk-based actions.',
-  },
-  {
-    title: 'Home Automation and IT Ops Tools',
-    year: '2023',
-    detail:
-      'Automated service desk tasks using Python, REST APIs, reporting, and alerting workflows.',
+      'Conducted ISO 21434 TARA and proposed a software-defined firewall for in-vehicle networks.',
   },
 ]
 
 const certifications = [
   { title: 'CCNP (In Progress)', completed: false },
   { title: 'CCNA (200-301) - Dec 2025', completed: true },
-  { title: 'Google IT Automation with Python - Jun 2025', completed: true },
   { title: 'CompTIA Network+ (N10-009) - Mar 2025', completed: true },
   { title: 'Microsoft Certified: Azure Fundamentals (AZ-900) - Mar 2025', completed: true },
+  { title: 'Google IT Automation with Python - Jun 2025', completed: true },
   { title: 'CompTIA Security+ (SY0-701) - Feb 2025', completed: true },
   { title: '(ISC)2 Certified in Cybersecurity (CC) - Oct 2024', completed: true },
 ]
 
 const skills = [
   {
-    label: 'Monitoring and Threat Detection',
-    items: ['Splunk', 'Azure Sentinel', 'PRTG', 'Wireshark', 'inSSIDer'],
+    label: 'Network Infrastructure',
+    items: ['LAN/WAN', 'WLAN', 'VLANs', 'STP', 'LACP', 'VRRP'],
   },
   {
-    label: 'Vulnerability Management',
-    items: ['Nessus', 'OpenVAS', 'Qualys', 'CVE Analysis', 'Risk Prioritization'],
+    label: 'IP Networking',
+    items: ['IPv4/v6', 'TCP/UDP', 'ICMP', 'DNS/DHCP', 'HTTP/HTTPS'],
   },
   {
-    label: 'Penetration Testing',
-    items: ['Reconnaissance', 'Enumeration', 'Exploitation', 'Reporting'],
+    label: 'Network Devices & Platforms',
+    items: ['Routers', 'Switches', 'Firewalls', 'Access Points', 'EVE-NG'],
   },
   {
-    label: 'Frameworks and Standards',
-    items: ['MITRE ATT&CK', 'NIST CSF', 'ISO 27001', 'GDPR', 'OWASP Top 10'],
+    label: 'Connectivity & Troubleshooting',
+    items: ['NAT', 'ACLs', 'IPSec/SSL VPNs', 'HA', 'Traffic Analysis'],
   },
   {
-    label: 'Security Platforms',
-    items: ['Defender for Endpoint', 'IAM', 'Intune', 'Windows/Linux Logs', 'Azure/AWS'],
+    label: 'Monitoring & Management',
+    items: ['PRTG', 'Splunk', 'Wireshark', 'Syslog', 'SNMP'],
   },
   {
-    label: 'Network and Security Operations',
-    items: ['Firewalls', 'IPSec/SSL VPN', 'ACLs', 'IDS/IPS', 'Policy Enforcement'],
+    label: 'Cloud Networking',
+    items: ['Azure/AWS', 'Subnets', 'Routing', 'Hybrid Connectivity', 'VMs'],
   },
   {
-    label: 'Networking Fundamentals',
-    items: ['IPv4/v6', 'DNS/DHCP', 'LAN/WAN', 'VLANs', 'OSPF', 'BGP', 'STP'],
+    label: 'Identity & Access',
+    items: ['Active Directory', 'LDAP', 'RADIUS', 'WLAN Access', 'VPN Access'],
   },
   {
-    label: 'Automation and Development',
-    items: ['Python', 'PowerShell', 'REST APIs', 'SQL', 'Django', 'Three.js'],
+    label: 'Automation & Ops',
+    items: ['Ansible', 'Python', 'PowerShell', 'REST APIs', 'ITSM'],
   },
 ]
 
 export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false)
-  const [showSocAlert, setShowSocAlert] = useState(false)
-  const [socAlertMode, setSocAlertMode] = useState('email')
-  const [socAlertTimeout, setSocAlertTimeout] = useState(null)
-  const [socAutoTimeout, setSocAutoTimeout] = useState(null)
   const [showDenied, setShowDenied] = useState(false)
   const [showCertOutput, setShowCertOutput] = useState(false)
+  const [isNavOpen, setIsNavOpen] = useState(false)
+  const [isPrivileged, setIsPrivileged] = useState(false)
+  const [isPasswordPrompt, setIsPasswordPrompt] = useState(false)
+  const [pendingConfig, setPendingConfig] = useState(false)
 
   useEffect(() => {
     const root = document.documentElement
@@ -170,35 +186,31 @@ export default function App() {
     }
   }, [])
 
-  useEffect(() => {
-    return () => {
-      if (socAlertTimeout) {
-        clearTimeout(socAlertTimeout)
-      }
-      if (socAutoTimeout) {
-        clearTimeout(socAutoTimeout)
-      }
-    }
-  }, [socAlertTimeout, socAutoTimeout])
-
-  const handleSocAlertClick = () => {
-    if (socAlertTimeout) {
-      clearTimeout(socAlertTimeout)
-    }
-    if (socAutoTimeout) {
-      clearTimeout(socAutoTimeout)
-    }
-    setSocAlertMode('alert')
-    setShowSocAlert(true)
-    const timeoutId = setTimeout(() => {
-      setShowSocAlert(false)
-    }, 30000)
-    setSocAlertTimeout(timeoutId)
-  }
-
   const handleRouterKeyDown = (event) => {
     if (event.key === 'Enter') {
-      setShowDenied(true)
+      const command = event.target.value.trim().toLowerCase()
+      if (isPasswordPrompt) {
+        setShowDenied(true)
+        setIsPasswordPrompt(false)
+        setPendingConfig(false)
+      } else if (command) {
+        if (isPrivileged) {
+          if (command === 'exit') {
+            setIsPrivileged(false)
+            setShowDenied(false)
+          } else {
+            setPendingConfig(command === 'conf t' || command === 'config t')
+            setIsPasswordPrompt(true)
+            setShowDenied(false)
+          }
+        } else if (command === 'en' || command === 'enable') {
+          setIsPrivileged(true)
+          setShowDenied(false)
+        } else {
+          setShowDenied(true)
+        }
+      }
+      event.target.value = ''
     }
   }
 
@@ -207,15 +219,25 @@ export default function App() {
   }
 
   useEffect(() => {
-    const autoId = setTimeout(() => {
-      setSocAlertMode('email')
-      setShowSocAlert(true)
-      const hideId = setTimeout(() => {
-        setShowSocAlert(false)
-      }, 6000)
-      setSocAlertTimeout(hideId)
-    }, 5200)
-    setSocAutoTimeout(autoId)
+    const mediaQuery = window.matchMedia('(max-width: 980px)')
+    const handleChange = () => {
+      if (!mediaQuery.matches) {
+        setIsNavOpen(false)
+      }
+    }
+    handleChange()
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange)
+    } else {
+      mediaQuery.addListener(handleChange)
+    }
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange)
+      } else {
+        mediaQuery.removeListener(handleChange)
+      }
+    }
   }, [])
 
   return (
@@ -227,51 +249,80 @@ export default function App() {
           </span>
           <div>
             <p className="brand__name">Shubodaya Kumar</p>
-            <p className="brand__role">Network Security and SOC</p>
+            <p className="brand__role">Network Engineer and NOC</p>
           </div>
         </div>
-        <nav className="site-nav" aria-label="Primary">
-          <a href="#about">About</a>
-          <a href="#experience">Experience</a>
-          <a href="#projects">Projects</a>
-          <a href="#education">Education</a>
-          <a href="#skills">Skills</a>
-          <a href="#certifications">Certifications</a>
-          <a href="#interests">Interests</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <div className="cta-group">
-          <a className="button button--ghost" href="https://www.linkedin.com/in/shubodaya/">
-            LinkedIn
-          </a>
-          <a
-            className="button"
-            href="https://drive.google.com/file/d/1t87kuPPaZn5gtye67Uwl3anHkwOakYcO/view?usp=sharing"
+        <button
+          className="nav-toggle"
+          type="button"
+          aria-label="Toggle navigation"
+          aria-expanded={isNavOpen}
+          aria-controls="primary-nav"
+          onClick={() => setIsNavOpen((prev) => !prev)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+        <div className={`header-panel ${isNavOpen ? 'header-panel--open' : ''}`}>
+          <nav
+            className="site-nav"
+            id="primary-nav"
+            aria-label="Primary"
+            onClick={(event) => {
+              if (event.target.closest('a')) {
+                setIsNavOpen(false)
+              }
+            }}
           >
-            Resume
-          </a>
+            <a href="#about">About</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Projects</a>
+            <a href="#education">Education</a>
+            <a href="#skills">Skills</a>
+            <a href="#certifications">Certifications</a>
+            <a href="#interests">Interests</a>
+            <a href="#contact">Contact</a>
+          </nav>
+          <div
+            className="cta-group"
+            onClick={(event) => {
+              if (event.target.closest('a')) {
+                setIsNavOpen(false)
+              }
+            }}
+          >
+            <a className="button button--ghost" href="https://www.linkedin.com/in/shubodaya/">
+              LinkedIn
+            </a>
+            <a
+              className="button button--bright"
+              href="https://docs.google.com/document/d/1N6X1tBwe-eXPUuUK0vc0NTwg8Dh3R3O_Y8Vla9vN9t4/edit?usp=sharing"
+            >
+              Resume
+            </a>
+          </div>
         </div>
       </header>
 
       <main>
-        <section className="hero" id="home" style={{ '--hero-bg': `url(${siemDashboard})` }}>
+        <section className="hero" id="home" style={{ '--hero-bg': `url(${heroBg})` }}>
           <div className="hero__content" data-reveal>
             <p className="eyebrow">Plymouth, England | Relocation open</p>
             <h1>
-              Network Security Professional
-              <span className="hero__title-accent">Protecting your Modern Infrastructure</span>
+              Network Engineer
+              <span className="hero__title-accent">Building reliable, scalable networks</span>
             </h1>
             <p className="hero__lead">
-              I bring 3+ years of 24x7 enterprise support and incident management experience,
-              combined with hands-on Security Operations work in SIEM monitoring, threat
-              hunting, and incident response, and I am ready to contribute immediately within
-              security or infrastructure-focused engineering teams.
+              Network Engineer with 3+ years of enterprise experience supporting on-prem and
+              cloud networks. Strong in IP routing, firewalls, Linux, and automation
+              (Python/Ansible), and ready to contribute immediately within NOC and network
+              engineering teams.
             </p>
             <p className="hero__lead">
-              My strengths lie in enterprise networking and security, working across
-              firewalls, routing, switching, wireless, traffic inspection, and access control,
-              alongside SIEM, SOAR, and security analytics, applying an adversary-aware
-              approach to validate and strengthen real-world defenses.
+              I focus on keeping services stable and users connected through hands-on LAN/WAN
+              troubleshooting, routing and switching, VPNs, and proactive monitoring across
+              multi-site environments.
             </p>
             <div className="hero__actions">
               <a className="button button--bright" href="#contact">
@@ -327,97 +378,84 @@ export default function App() {
             </div>
           </div>
           <div className="hero__visual" data-reveal>
-            <div className="hero__terminal">
-              <div className="hero__terminal-header">SOC Live Logs</div>
-              <div className="hero__terminal-body">
+            <div className="noc-panel">
+              <div className="noc-panel__header">NOC Live Feed</div>
+              <div className="noc-panel__body">
                 <span className="terminal-line terminal-line--persist" style={{ '--delay': '0s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:32:14 Auth success user=svc-backup
+                  <span className="log-tag log-tag--info">[INFO]</span> 09:18:12 OSPF neighbor up peer=10.40.1.2 area=0
                 </span>
                 <span className="terminal-line terminal-line--persist" style={{ '--delay': '0.4s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:32:21 DNS query ok host=repo.internal
+                  <span className="log-tag log-tag--info">[INFO]</span> 09:18:35 WAN link stable site=London latency=24ms
                 </span>
                 <span className="terminal-line terminal-line--persist" style={{ '--delay': '0.8s' }}>
-                  <span className="log-tag log-tag--warn">[WARN]</span> 10:32:33 Unusual port scan detected src=10.20.30.14
+                  <span className="log-tag log-tag--warn">[WARN]</span> 09:19:02 Interface flapping ge-0/0/3 switch=SW-03
                 </span>
-                <button
-                  className="terminal-line terminal-line--persist log-alert-button"
-                  style={{ '--delay': '1.2s' }}
-                  type="button"
-                  onClick={handleSocAlertClick}
-                >
-                  <span className="log-tag log-tag--alert">[ALERT]</span> 10:32:41 Malicious C2 beacon detected src=10.20.30.14 dst=185.202.1.33
-                </button>
+                <span className="terminal-line terminal-line--persist" style={{ '--delay': '1.2s' }}>
+                  <span className="log-tag log-tag--info">[INFO]</span> 09:19:26 DHCP pool healthy scope=Corp-Users
+                </span>
                 <span className="terminal-line terminal-line--persist" style={{ '--delay': '1.6s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:32:55 Firewall rule applied policy=block_c2
+                  <span className="log-tag log-tag--warn">[WARN]</span> 09:20:10 Packet loss 2% site=Manchester
                 </span>
                 <span className="terminal-line terminal-line--persist" style={{ '--delay': '2s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:33:02 Incident ticket created id=SOC-1184
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '2.4s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:33:18 GeoIP lookup dst=185.202.1.33 region=RU
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '2.8s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:33:32 Endpoint isolated host=WS-014 via EDR
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '3.2s' }}>
-                  <span className="log-tag log-tag--warn">[WARN]</span> 10:33:46 Suspicious PowerShell detected host=WS-014
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '3.6s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:34:02 DNS sinkhole applied domain=c2-update.net
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '4s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:34:15 Packet capture started interface=eth1
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '4.4s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 10:34:27 IOC match hash=6b1f...c9f2
+                  <span className="log-tag log-tag--info">[INFO]</span> 09:20:42 BGP prefixes ok peer=AS64501 routes=1243
                 </span>
               </div>
-              <div className={`log-panel__email ${showSocAlert ? 'log-panel__email--show' : ''}`}>
-                <div className="log-panel__email-title">
-                  {socAlertMode === 'alert' ? 'Alert' : 'Email Alert'}
-                </div>
-                <div className="log-panel__email-caution">Caution: Immediate action required</div>
-                <p>Critical alert: C2 beacon detected. Action required.</p>
-                <span>To: soc@company.com - Priority: High</span>
+            </div>
+            <div className="noc-kpis">
+              <div className="noc-kpi">
+                <p className="noc-kpi__label">Uptime</p>
+                <p className="noc-kpi__value">99.98%</p>
+              </div>
+              <div className="noc-kpi">
+                <p className="noc-kpi__label">Active Incidents</p>
+                <p className="noc-kpi__value">3</p>
+              </div>
+              <div className="noc-kpi">
+                <p className="noc-kpi__label">Open Tickets</p>
+                <p className="noc-kpi__value">12</p>
+              </div>
+              <div className="noc-kpi">
+                <p className="noc-kpi__label">MTTR</p>
+                <p className="noc-kpi__value">38m</p>
               </div>
             </div>
             <div className="hero__card">
-              <p className="card-title">Security Operations Focus</p>
+              <p className="card-title">Network Operations Focus</p>
               <div className="skill-bars">
                 <div className="skill-bar">
                   <div className="skill-bar__label">
-                    <span>SIEM Analytics</span>
-                    <span>92%</span>
+                    <span>Routing &amp; Switching</span>
+                    <span>94%</span>
                   </div>
                   <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '92%', '--delay': '0.1s' }} />
+                    <div className="skill-bar__fill" style={{ '--fill': '94%', '--delay': '0.1s' }} />
                   </div>
                 </div>
                 <div className="skill-bar">
                   <div className="skill-bar__label">
-                    <span>Incident Response</span>
-                    <span>88%</span>
-                  </div>
-                  <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '88%', '--delay': '0.3s' }} />
-                  </div>
-                </div>
-                <div className="skill-bar">
-                  <div className="skill-bar__label">
-                    <span>Threat Hunting</span>
-                    <span>85%</span>
-                  </div>
-                  <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '85%', '--delay': '0.5s' }} />
-                  </div>
-                </div>
-                <div className="skill-bar">
-                  <div className="skill-bar__label">
-                    <span>Firewall Policy</span>
+                    <span>LAN/WAN Operations</span>
                     <span>90%</span>
                   </div>
                   <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '90%', '--delay': '0.7s' }} />
+                    <div className="skill-bar__fill" style={{ '--fill': '90%', '--delay': '0.3s' }} />
+                  </div>
+                </div>
+                <div className="skill-bar">
+                  <div className="skill-bar__label">
+                    <span>Network Monitoring</span>
+                    <span>88%</span>
+                  </div>
+                  <div className="skill-bar__track">
+                    <div className="skill-bar__fill" style={{ '--fill': '88%', '--delay': '0.5s' }} />
+                  </div>
+                </div>
+                <div className="skill-bar">
+                  <div className="skill-bar__label">
+                    <span>Incident Troubleshooting</span>
+                    <span>91%</span>
+                  </div>
+                  <div className="skill-bar__track">
+                    <div className="skill-bar__fill" style={{ '--fill': '91%', '--delay': '0.7s' }} />
                   </div>
                 </div>
               </div>
@@ -428,35 +466,34 @@ export default function App() {
         <section className="section" id="about">
           <div className="section__header" data-reveal>
             <p className="eyebrow">About</p>
-            <h2>Mission-driven security, grounded in networks</h2>
+            <h2>Mission-driven networking, grounded in operations</h2>
           </div>
           <div className="about">
             <div className="about__copy" data-reveal>
               <p>
                 I bring energy, ownership, and consistency to everything I work on. I am the
                 kind of person who enjoys digging into problems, learning something new every
-                day, and making systems better than I found them. Security, for me, is not
-                just a role - it is a craft I am genuinely invested in.
+                day, and making systems better than I found them. Networking, for me, is a
+                craft I am genuinely invested in.
               </p>
               <p>
-                With experience across 24x7 enterprise environments, cloud platforms, and
-                live incident scenarios, I am comfortable working under pressure and
-                communicating clearly when it matters most. My MSc in Cybersecurity and
-                engineering background give me a strong technical base, but it is my
-                curiosity, work ethic, and follow-through that make me a reliable asset to a
-                team.
+                With experience across 24x7 enterprise environments and cloud platforms, I
+                am comfortable working under pressure and communicating clearly when it
+                matters most. My engineering background gives me a strong technical base, but
+                it is my curiosity, work ethic, and follow-through that make me a reliable
+                asset to a team.
               </p>
               <p>
                 I am friendly, easy to work with, and proactive by nature. Whether
-                collaborating with engineers, supporting users, or responding to incidents,
+                collaborating with engineers, supporting users, or resolving outages,
                 I bring focus, accountability, and a genuine desire to contribute. I am
                 motivated by impact, and I take pride in being someone teams can trust and
                 depend on.
               </p>
               <div className="about__chips">
-                <span>Network Security Engineer</span>
-                <span>SOC Ready</span>
-                <span>Ethical Hacking</span>
+                <span>Network Engineer</span>
+                <span>NOC Ready</span>
+                <span>Routing &amp; Switching</span>
                 <span>Automation Focused</span>
               </div>
             </div>
@@ -525,17 +562,34 @@ export default function App() {
                   3.3.3.3           1   FULL/ -         00:00:31    10.20.30.3      Gi0/0       0     0     0
                 </span>
                 <div className="terminal-interactive" style={{ '--delay': '10s' }}>
-                  <span className="terminal-prompt">Router&gt;</span>
-                  <input
-                    className="terminal-input"
-                    type="text"
-                    placeholder="type any command"
-                    aria-label="Command input"
-                    onKeyDown={handleRouterKeyDown}
-                  />
-                  <span className={`terminal-denied ${showDenied ? 'terminal-denied--show' : ''}`}>
-                    Not authorized
-                  </span>
+                  {isPasswordPrompt ? (
+                    <div className="terminal-input-row">
+                      <span className="terminal-password">Password:</span>
+                      <input
+                        className="terminal-input"
+                        type="password"
+                        aria-label="Password input"
+                        onKeyDown={handleRouterKeyDown}
+                      />
+                      <span className={`terminal-denied ${showDenied ? 'terminal-denied--show' : ''}`}>
+                        Not authorized
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="terminal-input-row">
+                      <span className="terminal-prompt">{isPrivileged ? 'Router#' : 'Router>'}</span>
+                      <input
+                        className="terminal-input"
+                        type="text"
+                        placeholder="type any command"
+                        aria-label="Command input"
+                        onKeyDown={handleRouterKeyDown}
+                      />
+                      <span className={`terminal-denied ${showDenied ? 'terminal-denied--show' : ''}`}>
+                        Not authorized
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <span className="terminal-spacer" />
               </div>
@@ -552,22 +606,41 @@ export default function App() {
           <div className="section__header" data-reveal>
             <p className="eyebrow">Experience</p>
             <h2>Experience</h2>
+            <p className="section__note">
+              Enterprise network support across routing, switching, VPNs, and NOC escalations.
+            </p>
           </div>
           <div className="timeline">
             {experience.map((role) => (
               <article className="timeline__item" key={role.role} data-reveal>
-                <div>
-                  <p className="timeline__date">{role.dates}</p>
-                  <h3>{role.role}</h3>
-                  <p className="timeline__company">
-                    {role.company} | {role.location}
-                  </p>
+                <div className="timeline__details">
+                  <div className="timeline__meta">
+                    <p className="timeline__date">{role.dates}</p>
+                    <h3>{role.role}</h3>
+                    <div className="timeline__company">
+                      <span>{role.company}</span>
+                      <span>{role.location}</span>
+                    </div>
+                    <div className="timeline__tags">
+                      {role.tags.map((tag) => (
+                        <span key={tag}>{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <ul>
+                    {role.highlights.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
                 </div>
-                <ul>
-                  {role.highlights.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
+                <aside className="timeline__achievements">
+                  <p className="timeline__achievements-title">Key Achievements</p>
+                  <ul>
+                    {role.achievements.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </aside>
               </article>
             ))}
           </div>
@@ -580,10 +653,10 @@ export default function App() {
         >
           <div className="section__header" data-reveal>
             <p className="eyebrow">Projects</p>
-            <h2>Hands-on labs, research, and security automation</h2>
+            <h2>Hands-on labs, network builds, and automation</h2>
             <p className="section__note">
-              I build labs that mimic real adversaries, then engineer defenses that hold up
-              under pressure.
+              I build networks that mirror real deployments, then validate performance,
+              resilience, and operational readiness.
             </p>
           </div>
           <div className="project-grid">
@@ -594,11 +667,14 @@ export default function App() {
                 <p>{project.detail}</p>
               </article>
             ))}
-          </div>
-          <div className="section__cta" data-reveal>
-            <a className="button button--ghost" href="https://github.com/shubodaya?tab=repositories">
-              Explore more on GitHub
-            </a>
+            <div className="project-card project-card--cta" data-reveal>
+              <p className="project-card__year">More</p>
+              <h3>Explore on GitHub</h3>
+              <p>See more hands-on labs and automation work.</p>
+              <a className="button button--ghost" href="https://github.com/shubodaya?tab=repositories">
+                Explore more on GitHub
+              </a>
+            </div>
           </div>
         </section>
 
@@ -614,13 +690,25 @@ export default function App() {
           <div className="edu-grid">
             <article data-reveal>
               <h3>MSc in Cybersecurity (NCSC Certified)</h3>
-              <p>Swansea University | Distinction</p>
-              <p>Sep 2023 - Dec 2024 | Swansea, Wales, UK</p>
+              <div className="edu-meta">
+                <span>Swansea University</span>
+                <span>Distinction</span>
+              </div>
+              <p className="edu-dates">
+                <span>Sep 2023 - Dec 2024</span>
+                <span>Swansea, Wales, UK</span>
+              </p>
             </article>
             <article data-reveal>
               <h3>BEng in Electronics and Communication</h3>
-              <p>Vidya Vardhaka College of Engineering | First Class</p>
-              <p>Jul 2016 - Aug 2020 | Mysore, India</p>
+              <div className="edu-meta">
+                <span>Vidya Vardhaka College</span>
+                <span>First Class</span>
+              </div>
+              <p className="edu-dates">
+                <span>Jul 2016 - Aug 2020</span>
+                <span>Mysore, India</span>
+              </p>
             </article>
           </div>
         </section>
@@ -632,10 +720,10 @@ export default function App() {
         >
           <div className="section__header" data-reveal>
             <p className="eyebrow">Skills</p>
-            <h2>Security-first tooling with a networking backbone</h2>
+            <h2>Networking-first tooling with a reliability mindset</h2>
             <p className="section__note">
-              I bring hands-on expertise across monitoring, network defense, automation, and
-              ethical hacking.
+              I bring hands-on expertise across routing, monitoring, connectivity, and
+              automation.
             </p>
           </div>
           <div className="skills-grid">
@@ -719,7 +807,7 @@ export default function App() {
         <section className="section" id="interests">
           <div className="section__header" data-reveal>
             <p className="eyebrow">Interests</p>
-            <h2>Creative energy outside the SOC</h2>
+            <h2>Creative energy outside the NOC</h2>
           </div>
           <div className="interest-grid">
             <div data-reveal>
@@ -745,7 +833,7 @@ export default function App() {
           >
             <div className="section__header" data-reveal>
               <p className="eyebrow">Contact</p>
-              <h2>Let us build a safer network together</h2>
+              <h2>Let us build a stronger network together</h2>
             </div>
             <div className="contact__grid">
               <div className="contact__cards" data-reveal>
@@ -840,7 +928,7 @@ export default function App() {
       </main>
 
       <footer className="site-footer">
-        <p>Built for security teams, recruiters, and engineering partners.</p>
+        <p>Built for network teams, recruiters, and engineering partners.</p>
         <p>
           Reach me at <a href="mailto:hnshubodaya@gmail.com">hnshubodaya@gmail.com</a>
         </p>

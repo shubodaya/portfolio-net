@@ -1,4 +1,4 @@
-# Shubodaya Portfolio
+# Shubodaya Portfolio (Network)
 
 Live site:
-- https://shubodaya.github.io/portfolio-sec/
+- https://shubodaya.github.io/portfolio-net/
