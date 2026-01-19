@@ -1412,6 +1412,9 @@ img {
   text-align: center;
   color: var(--text-muted);
   background: rgba(10, 14, 19, 0.9);
+  display: grid;
+  justify-items: center;
+  gap: 6px;
 }
 
 .scroll-top {
