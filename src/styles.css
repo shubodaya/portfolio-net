@@ -663,6 +663,10 @@ img {
   box-shadow: 0 10px 20px rgba(0, 240, 200, 0.2);
 }
 
+.about__cta {
+  margin-top: 16px;
+}
+
 .about__grid {
   display: grid;
   gap: 16px;

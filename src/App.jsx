@@ -496,6 +496,14 @@ export default function App() {
                 <span>Routing &amp; Switching</span>
                 <span>Automation Focused</span>
               </div>
+              <div className="about__cta">
+                <a
+                  className="button button--bright"
+                  href="https://docs.google.com/document/d/1N6X1tBwe-eXPUuUK0vc0NTwg8Dh3R3O_Y8Vla9vN9t4/edit?usp=sharing"
+                >
+                  Resume
+                </a>
+              </div>
             </div>
             <div className="about__grid" data-reveal>
               <div className="metric">
