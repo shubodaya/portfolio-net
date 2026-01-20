@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import shieldIcon from './assets/shield.svg'
 import heroBg from './assets/data3.jpg'
 import networkNodes from './assets/network-nodes.svg'
@@ -140,6 +140,63 @@ const skills = [
   },
 ]
 
+const nocLogTemplates = [
+  { level: 'info', message: 'OSPF neighbor up peer=10.40.1.2 area=0' },
+  { level: 'info', message: 'WAN link stable site=London latency=24ms' },
+  { level: 'warn', message: 'Interface flapping ge-0/0/3 switch=SW-03' },
+  { level: 'info', message: 'DHCP pool healthy scope=Corp-Users' },
+  { level: 'warn', message: 'Packet loss 2% site=Manchester' },
+  { level: 'info', message: 'BGP prefixes ok peer=AS64501 routes=1243' },
+  { level: 'notice', message: 'ISP failover ready path=Primary' },
+  { level: 'warn', message: 'CPU spike core-router-1 usage=82%' },
+  { level: 'info', message: 'VPN tunnel rekeyed tunnel=HQ-Branch-07' },
+  { level: 'warn', message: 'High latency detected site=Berlin rtt=210ms' },
+  { level: 'notice', message: 'SNMP trap cleared node=FW-02' },
+  { level: 'info', message: 'Link up interface=xe-0/1/1 switch=SW-05' },
+  { level: 'warn', message: 'Disk usage 85% on log collector' },
+  { level: 'info', message: 'BGP session established peer=AS64512' },
+  { level: 'debug', message: 'NetFlow sample exported collector=10.50.1.20' },
+  { level: 'warn', message: 'Port errors rising interface=ge-0/0/1' },
+  { level: 'info', message: 'Service restored site=Leeds duration=6m' },
+  { level: 'notice', message: 'User VLAN broadcast storm contained' },
+  { level: 'info', message: 'NTP sync stable offset=2ms' },
+  { level: 'error', message: 'AAA server timeout auth=radius-02' },
+  { level: 'crit', message: 'Core switch stack split detected' },
+  { level: 'debug', message: 'Routing table refresh completed in 42ms' },
+  { level: 'notice', message: 'Config archive saved device=FW-Edge' },
+  { level: 'error', message: 'WAN circuit down site=Bristol' },
+  { level: 'crit', message: 'BGP neighbor down peer=AS64501' },
+  { level: 'debug', message: 'SNMP poll jitter normal node=SW-03' },
+]
+
+const NOC_PANEL_HEIGHT_PX = 244
+const NOC_PANEL_PADDING_PX = 28
+const NOC_LINE_STEP_PX = 20
+const NOC_LINE_GAP_PX = 6
+const NOC_VISIBLE_LIMIT = Math.floor(
+  (NOC_PANEL_HEIGHT_PX - NOC_PANEL_PADDING_PX + NOC_LINE_GAP_PX) /
+    (NOC_LINE_STEP_PX + NOC_LINE_GAP_PX)
+)
+const NOC_SHIFT_DURATION_MS = 520
+const NOC_LOG_INTERVAL_MS = 1600
+const NOC_LOG_INITIAL_COUNT = 0
+
+const formatTime = (date) => {
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+  return `${hours}:${minutes}:${seconds}`
+}
+
+const buildLogEntry = (template, date = new Date()) => ({
+  level: template.level,
+  message: template.message,
+  time: formatTime(date),
+})
+
+const getRandomTemplate = () =>
+  nocLogTemplates[Math.floor(Math.random() * nocLogTemplates.length)]
+
 export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showDenied, setShowDenied] = useState(false)
@@ -148,6 +205,21 @@ export default function App() {
   const [isPrivileged, setIsPrivileged] = useState(false)
   const [isPasswordPrompt, setIsPasswordPrompt] = useState(false)
   const [pendingConfig, setPendingConfig] = useState(false)
+  const [isNocShifting, setIsNocShifting] = useState(false)
+  const [isNocSettling, setIsNocSettling] = useState(false)
+  const nocShiftTimeoutRef = useRef(0)
+  const nocShiftRafRef = useRef(0)
+  const isNocShiftingRef = useRef(false)
+  const nocLogsRef = useRef([])
+  const [nocLogs, setNocLogs] = useState(() =>
+    Array.from({ length: NOC_LOG_INITIAL_COUNT }, (_, index) =>
+      buildLogEntry(
+        nocLogTemplates[index % nocLogTemplates.length],
+        new Date(Date.now() - (NOC_LOG_INITIAL_COUNT - index) * NOC_LOG_INTERVAL_MS)
+      )
+    )
+  )
+  nocLogsRef.current = nocLogs
 
   useEffect(() => {
     const root = document.documentElement
@@ -183,6 +255,44 @@ export default function App() {
       window.removeEventListener('scroll', updateScroll)
       observer.disconnect()
       if (rafId) cancelAnimationFrame(rafId)
+    }
+  }, [])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isNocShiftingRef.current) return
+      const template = getRandomTemplate()
+      const nextLog = buildLogEntry(template)
+      const nextLogs = [...nocLogsRef.current, nextLog]
+      const shouldShift = nextLogs.length > NOC_VISIBLE_LIMIT
+      setNocLogs(nextLogs)
+      if (shouldShift) {
+        isNocShiftingRef.current = true
+        setIsNocShifting(true)
+        nocShiftTimeoutRef.current = window.setTimeout(() => {
+          setNocLogs((prev) => (prev.length > NOC_VISIBLE_LIMIT ? prev.slice(1) : prev))
+          setIsNocShifting(false)
+          setIsNocSettling(true)
+          isNocShiftingRef.current = false
+          nocShiftTimeoutRef.current = 0
+          if (nocShiftRafRef.current) {
+            cancelAnimationFrame(nocShiftRafRef.current)
+          }
+          nocShiftRafRef.current = requestAnimationFrame(() => {
+            setIsNocSettling(false)
+            nocShiftRafRef.current = 0
+          })
+        }, NOC_SHIFT_DURATION_MS)
+      }
+    }, NOC_LOG_INTERVAL_MS)
+    return () => {
+      clearInterval(interval)
+      if (nocShiftTimeoutRef.current) {
+        clearTimeout(nocShiftTimeoutRef.current)
+      }
+      if (nocShiftRafRef.current) {
+        cancelAnimationFrame(nocShiftRafRef.current)
+      }
     }
   }, [])
 
@@ -380,25 +490,29 @@ export default function App() {
           <div className="hero__visual" data-reveal>
             <div className="noc-panel">
               <div className="noc-panel__header">NOC Live Feed</div>
-              <div className="noc-panel__body">
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '0s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 09:18:12 OSPF neighbor up peer=10.40.1.2 area=0
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '0.4s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 09:18:35 WAN link stable site=London latency=24ms
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '0.8s' }}>
-                  <span className="log-tag log-tag--warn">[WARN]</span> 09:19:02 Interface flapping ge-0/0/3 switch=SW-03
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '1.2s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 09:19:26 DHCP pool healthy scope=Corp-Users
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '1.6s' }}>
-                  <span className="log-tag log-tag--warn">[WARN]</span> 09:20:10 Packet loss 2% site=Manchester
-                </span>
-                <span className="terminal-line terminal-line--persist" style={{ '--delay': '2s' }}>
-                  <span className="log-tag log-tag--info">[INFO]</span> 09:20:42 BGP prefixes ok peer=AS64501 routes=1243
-                </span>
+              <div
+                className="noc-panel__body"
+                style={{
+                  '--noc-panel-height': `${NOC_PANEL_HEIGHT_PX}px`,
+                  '--noc-line-step': `${NOC_LINE_STEP_PX}px`,
+                  '--noc-line-gap': `${NOC_LINE_GAP_PX}px`,
+                  '--noc-shift-duration': `${NOC_SHIFT_DURATION_MS}ms`,
+                }}
+              >
+                <div
+                  className={`noc-panel__stream ${isNocShifting ? 'noc-panel__stream--shift' : ''} ${
+                    isNocSettling ? 'noc-panel__stream--settle' : ''
+                  }`}
+                >
+                  {nocLogs.map((log, index) => (
+                    <span className="noc-panel__line" key={`${log.time}-${index}`}>
+                      <span className={`log-tag log-tag--${log.level}`}>
+                        [{log.level.toUpperCase()}]
+                      </span>{' '}
+                      {log.time} {log.message}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="noc-kpis">
@@ -527,7 +641,7 @@ export default function App() {
               <div className="about__image">
                 <img src={networkTopology} alt="Network topology overview" />
               </div>
-              <div className="hero__terminal">
+              <div className="hero__terminal hero__terminal--about">
                 <div className="hero__terminal-header">cli@router:~</div>
                 <div className="hero__terminal-body">
                   <span className="typing-line" style={{ '--delay': '0s' }}>
@@ -569,37 +683,37 @@ export default function App() {
                 <span className="terminal-line terminal-line--persist" style={{ '--delay': '9.2s' }}>
                   3.3.3.3           1   FULL/ -         00:00:31    10.20.30.3      Gi0/0       0     0     0
                 </span>
-                <div className="terminal-interactive" style={{ '--delay': '10s' }}>
-                  {isPasswordPrompt ? (
-                    <div className="terminal-input-row">
-                      <span className="terminal-password">Password:</span>
-                      <input
-                        className="terminal-input"
-                        type="password"
-                        aria-label="Password input"
-                        onKeyDown={handleRouterKeyDown}
-                      />
-                      <span className={`terminal-denied ${showDenied ? 'terminal-denied--show' : ''}`}>
-                        Not authorized
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="terminal-input-row">
-                      <span className="terminal-prompt">{isPrivileged ? 'Router#' : 'Router>'}</span>
-                      <input
-                        className="terminal-input"
-                        type="text"
-                        placeholder="type any command"
-                        aria-label="Command input"
-                        onKeyDown={handleRouterKeyDown}
-                      />
-                      <span className={`terminal-denied ${showDenied ? 'terminal-denied--show' : ''}`}>
-                        Not authorized
-                      </span>
-                    </div>
-                  )}
-                </div>
                 <span className="terminal-spacer" />
+              </div>
+              <div className="terminal-interactive">
+                {isPasswordPrompt ? (
+                  <div className="terminal-input-row">
+                    <span className="terminal-password">Password:</span>
+                    <input
+                      className="terminal-input"
+                      type="password"
+                      aria-label="Password input"
+                      onKeyDown={handleRouterKeyDown}
+                    />
+                    <span className={`terminal-denied ${showDenied ? 'terminal-denied--show' : ''}`}>
+                      Not authorized
+                    </span>
+                  </div>
+                ) : (
+                  <div className="terminal-input-row">
+                    <span className="terminal-prompt">{isPrivileged ? 'Router#' : 'Router>'}</span>
+                    <input
+                      className="terminal-input"
+                      type="text"
+                      placeholder="type any command"
+                      aria-label="Command input"
+                      onKeyDown={handleRouterKeyDown}
+                    />
+                    <span className={`terminal-denied ${showDenied ? 'terminal-denied--show' : ''}`}>
+                      Not authorized
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
             </div>
