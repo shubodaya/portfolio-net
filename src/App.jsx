@@ -1,4 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
+import {
+  motion,
+  useAnimationFrame,
+  AnimatePresence,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+  useVelocity,
+} from 'framer-motion'
+import { wrap } from '@motionone/utils'
 import shieldIcon from './assets/shield.svg'
 import heroBg from './assets/data3.jpg'
 import networkNodes from './assets/network-nodes.svg'
@@ -7,26 +18,45 @@ import certBadges from './assets/cert-badges.svg'
 import bullseyeCert from './assets/bullseye.jpg'
 import vscodePython from './assets/vscode-python.jpg'
 import pythonArt from './assets/python-script.svg'
-import educationCap from './assets/education-cap.svg'
 import skillsTarget from './assets/skills-target.jpg'
 import socImage from './assets/soc.jpg'
 
 const experience = [
   {
-    role: 'IT Support Engineer (Freelance)',
+    role: 'Network Engineer',
     company: 'Itarmi IT Services',
     location: 'United Kingdom',
     dates: 'May 2025 - Present',
-    tags: ['NOC Escalations', 'Routing & Switching', 'LAN/WAN Support'],
+    tags: ['NOC Escalations', 'Routing & Switching', 'LAN/WAN Support', 'VPN & Zero Trust', 'Change Control'],
     achievements: [
       'Resolved 25+ incidents across on-site and remote engagements.',
       'Delivered clean change records and customer-ready completion reports.',
       'Maintained steady SLA adherence across priority tickets.',
     ],
     highlights: [
-      'Delivered network infrastructure support for routers, switches, and access points.',
-      'Coordinated escalations with NOC and engineering teams to isolate and resolve access issues.',
-      'Troubleshot LAN/WAN connectivity issues, validating cabling, ports, and post-change stability.',
+      'Owned 2nd/3rd line routing, switching, and firewall escalations across UK sites.',
+      'Stabilized LAN/WAN links and VPNs, validating cabling, ports, and post-change health.',
+      'Configured firewall policies, NAT, ACLs, and HA to restore secure connectivity.',
+      'Implemented IPSec/SSL VPN and SD-WAN with OSPF/BGP for multi-site customers.',
+      'Diagnosed outages via logs/pcaps and coordinated fixes with NOC and engineering.',
+      'Integrated AD/Azure AD with MFA to standardize secure access.',
+    ],
+  },
+  {
+    role: 'MSc Cybersecurity',
+    company: 'Swansea University',
+    location: 'Swansea, Wales, UK',
+    dates: 'Sep 2023 - Dec 2024',
+    tags: ['Distinction', 'NCSC Certified', 'Cybersecurity', 'Cryptography', 'Risk & Governance'],
+    achievements: [
+      'Completed NCSC-certified MSc with a distinction, focused on network and application security.',
+      'Delivered dissertation on automotive network security with ISO 21434 TARA.',
+      'Applied labs across cryptography, wireless security, and pentesting aligned to OWASP/MITRE.',
+    ],
+    highlights: [
+      'Hands-on in TLS, key management, and secure network architectures.',
+      'Risk and governance work with GDPR, ISO/IEC 27001, and NIST CSF controls.',
+      'Pentesting and vuln analysis including CVE-led exercises and MITRE ATT&CK mapping.',
     ],
   },
   {
@@ -34,24 +64,36 @@ const experience = [
     company: 'SonicWall Technologies',
     location: 'Bangalore, India',
     dates: 'May 2021 - Aug 2023',
-    tags: ['P1-P3 Incidents', 'VPN/SD-WAN', 'HA & Failover'],
+    tags: ['P1-P3 Incidents', 'VPN/SD-WAN', 'HA & Failover', 'Firewall Policy', 'BGP/OSPF'],
     achievements: [
       'Resolved 1,800+ cases annually and authored 20+ knowledge base articles.',
       'Launched live chat support with Development and Salesforce teams.',
       'Earned three Spot Awards; SNSA & SNSP certified.',
     ],
     highlights: [
-      'Delivered 2nd/3rd line network support, resolving P1-P3 incidents within SLA targets.',
-      'Troubleshot LAN, WAN, VPN, and data-center connectivity issues across large customer networks.',
-      'Configured firewall policies, NAT, ACLs, routing, switching, and SD-WAN in live environments.',
-      'Supported multi-site connectivity with OSPF/BGP and cloud interoperability.',
-      'Implemented IPSec VPNs, WAN load balancing, and HA failover for multi-site customers, validating tunnels and failover behavior during maintenance windows.',
-      'Diagnosed service degradation by analyzing logs, packet captures, and traffic flows, restoring stability after routing and VPN changes.',
-      'Integrated AD and Azure AD using LDAP/RADIUS, enabling MFA across LAN, VLANs, and SSL VPN with consistent access policies.',
-      'Maintained monitoring and alerting in SonicWall Analytics and PRTG, tuning thresholds and dashboards for availability and performance.',
-      'Delivered zero-touch mass deployment via SonicWall CSC, standardizing templates and fleet-wide configuration updates.',
-      'Investigated firmware and hardware defects, reproduced issues in lab environments, and coordinated hotfixes and RMAs with engineering.',
-      'Mentored junior engineers and ensured clear handovers during high-impact incidents.',
+      'Resolved P1-P3 incidents for LAN/WAN/VPN and data-center connectivity within SLA.',
+      'Built and tuned firewall policies, NAT/ACLs, SD-WAN, HA, and VPN failover for multi-site customers.',
+      'Stabilized routing (OSPF/BGP) and VPN tunnels using log/pcap analysis and controlled change windows.',
+      'Integrated AD/Azure AD with LDAP/RADIUS + MFA for LAN, VLAN, and SSL VPN access consistency.',
+      'Optimized monitoring in SonicWall Analytics and PRTG to cut noise and surface actionable alerts.',
+      'Delivered zero-touch rollouts via SonicWall CSC templates and authored knowledge base articles.',
+    ],
+  },
+  {
+    role: 'BEng Electronics & Communication',
+    company: 'Vidyavardhaka College of Engineering',
+    location: 'Mysore, India',
+    dates: 'Jul 2016 - Aug 2020',
+    tags: ['First Class', 'Electronics', 'Networking', 'Embedded Systems', 'Signal Processing'],
+    achievements: [
+      'Published final-year dissertation on IoT emergency activation in automobiles.',
+      'Built foundations across C, VHDL, DSP, embedded systems, and networking protocols.',
+      'Completed specialized coursework on military radar and wireless communications.',
+    ],
+    highlights: [
+      'Core studies in computer networks, cybersecurity fundamentals, and LTE antennas.',
+      'Project work spanning web/mobile apps, 3D modeling, automation, and embedded platforms.',
+      'Active participation in IEEE and technical symposiums, workshops, and labs.',
     ],
   },
 ]
@@ -140,6 +182,23 @@ const skills = [
   },
 ]
 
+const education = [
+  {
+    degree: 'MSc in Cybersecurity (NCSC Certified)',
+    school: 'Swansea University',
+    result: 'Distinction',
+    dates: 'Sep 2023 - Dec 2024',
+    location: 'Swansea, Wales, UK',
+  },
+  {
+    degree: 'BEng in Electronics and Communication',
+    school: 'Vidya Vardhaka College',
+    result: 'First Class',
+    dates: 'Jul 2016 - Aug 2020',
+    location: 'Mysore, India',
+  },
+]
+
 const nocLogTemplates = [
   { level: 'info', message: 'OSPF neighbor up peer=10.40.1.2 area=0' },
   { level: 'info', message: 'WAN link stable site=London latency=24ms' },
@@ -167,6 +226,28 @@ const nocLogTemplates = [
   { level: 'error', message: 'WAN circuit down site=Bristol' },
   { level: 'crit', message: 'BGP neighbor down peer=AS64501' },
   { level: 'debug', message: 'SNMP poll jitter normal node=SW-03' },
+]
+
+const nocMetrics = [
+  { label: 'Uptime', value: '99.98%' },
+  { label: 'Active Incidents', value: '3' },
+  { label: 'Open Tickets', value: '12' },
+  { label: 'MTTR', value: '38m' },
+]
+
+const networkTicker = [
+  'Network Engineering',
+  'NOC',
+  'Routing & Switching',
+  'BGP & OSPF',
+  'SD-WAN',
+  'Firewalls',
+  'VPN & Zero Trust',
+  'Cloud Networking',
+  'Automation',
+  'Observability',
+  'Incident Response',
+  'Network Security',
 ]
 
 const NOC_PANEL_HEIGHT_PX = 244
@@ -197,6 +278,53 @@ const buildLogEntry = (template, date = new Date()) => ({
 const getRandomTemplate = () =>
   nocLogTemplates[Math.floor(Math.random() * nocLogTemplates.length)]
 
+function ParallaxText({ items, baseVelocity = 100 }) {
+  const baseX = useMotionValue(0)
+  const { scrollY } = useScroll()
+  const scrollVelocity = useVelocity(scrollY)
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400,
+  })
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
+    clamp: false,
+  })
+
+  const directionFactor = useRef(1)
+  useAnimationFrame((_, delta) => {
+    let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
+    if (velocityFactor.get() < 0) {
+      directionFactor.current = -1
+    } else if (velocityFactor.get() > 0) {
+      directionFactor.current = 1
+    }
+    moveBy += directionFactor.current * moveBy * velocityFactor.get()
+    baseX.set(baseX.get() + moveBy)
+  })
+
+  const x = useTransform(baseX, (v) => `${wrap(-25, -50, v)}%`)
+
+  const tokens = items.map((item, idx) => (
+    <span
+      key={`${item}-${idx}`}
+      className={`scroller__item ${idx % 2 === 1 ? 'scroller__item--accent' : ''}`}
+    >
+      {item}
+    </span>
+  ))
+
+  return (
+    <div className="parallax">
+      <motion.div className="scroller" style={{ x }}>
+        {tokens}
+        {tokens}
+        {tokens}
+        {tokens}
+      </motion.div>
+    </div>
+  )
+}
+
 export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showDenied, setShowDenied] = useState(false)
@@ -207,10 +335,18 @@ export default function App() {
   const [pendingConfig, setPendingConfig] = useState(false)
   const [isNocShifting, setIsNocShifting] = useState(false)
   const [isNocSettling, setIsNocSettling] = useState(false)
+  const [activeExperienceIndex, setActiveExperienceIndex] = useState(0)
+  const [expProgress, setExpProgress] = useState(0)
+  const [heroStep, setHeroStep] = useState(1)
   const nocShiftTimeoutRef = useRef(0)
   const nocShiftRafRef = useRef(0)
   const isNocShiftingRef = useRef(false)
+  const experienceTimerRef = useRef(0)
+  const experienceProgressRef = useRef(0)
   const nocLogsRef = useRef([])
+  const projectsRef = useRef(null)
+  const heroStepRefs = useRef([])
+  const heroRef = useRef(null)
   const [nocLogs, setNocLogs] = useState(() =>
     Array.from({ length: NOC_LOG_INITIAL_COUNT }, (_, index) =>
       buildLogEntry(
@@ -246,7 +382,7 @@ export default function App() {
           }
         })
       },
-      { threshold: 0.2 }
+      { threshold: 0.5 }
     )
 
     document.querySelectorAll('[data-reveal]').forEach((el) => observer.observe(el))
@@ -328,6 +464,221 @@ export default function App() {
     setShowCertOutput(true)
   }
 
+  const SLIDE_DURATION_MS = 9000
+
+  const startExperienceCycle = (index = 0) => {
+    if (experienceTimerRef.current) clearTimeout(experienceTimerRef.current)
+    if (experienceProgressRef.current) clearInterval(experienceProgressRef.current)
+
+    setActiveExperienceIndex(index)
+    setExpProgress(0)
+    const startTs = Date.now()
+
+    experienceProgressRef.current = window.setInterval(() => {
+      const elapsed = Date.now() - startTs
+      setExpProgress(Math.min(100, (elapsed / SLIDE_DURATION_MS) * 100))
+    }, 120)
+
+    experienceTimerRef.current = window.setTimeout(() => {
+      const next = (index + 1) % experience.length
+      startExperienceCycle(next)
+    }, SLIDE_DURATION_MS)
+  }
+
+  useEffect(() => {
+    startExperienceCycle(0)
+    return () => {
+      if (experienceTimerRef.current) clearTimeout(experienceTimerRef.current)
+      if (experienceProgressRef.current) clearInterval(experienceProgressRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const goToExperience = (index) => {
+    startExperienceCycle(index)
+  }
+
+  // Hero step-on-scroll (reference-style)
+  useEffect(() => {
+    const onScroll = () => {
+      const winTop = window.scrollY
+      const winMid = winTop + window.innerHeight / 2
+      const winBot = winTop + window.innerHeight
+
+      let inViewIndex = 0
+      heroStepRefs.current.forEach((el, idx) => {
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const liTop = rect.top + winTop
+        const liBot = liTop + rect.height
+        const isInView = !(liBot <= winMid || liTop >= winBot)
+        el.classList.toggle('inView', isInView || liTop <= winMid)
+        if (isInView || liTop <= winMid) inViewIndex = idx
+      })
+      setHeroStep(inViewIndex + 1)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+  const goPrevExperience = () => {
+    goToExperience((activeExperienceIndex - 1 + experience.length) % experience.length)
+  }
+
+  const goNextExperience = () => {
+    goToExperience((activeExperienceIndex + 1) % experience.length)
+  }
+
+  const expGroupVariants = {
+    hidden: { opacity: 0, y: 12 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { when: 'beforeChildren', staggerChildren: 0.05 },
+    },
+  }
+
+  const expItemVariants = {
+    hidden: { opacity: 0, y: 8 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.25 } },
+  }
+
+  const projectGroupVariants = {
+    hidden: { opacity: 0, y: 12 },
+    show: { opacity: 1, y: 0, transition: { staggerChildren: 0.07 } },
+  }
+
+  const projectItemVariants = {
+    hidden: { opacity: 0, y: 16, scale: 0.98 },
+    show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: [0.25, 0.8, 0.4, 1] } },
+  }
+
+  const [projectsOffset, setProjectsOffset] = useState(0)
+  const [projectsShellHeight, setProjectsShellHeight] = useState(0)
+  const projectCardsRef = useRef([])
+  const projectGridRef = useRef(null)
+  const projectsX = useMotionValue(0)
+  const projectsLoopMarkerRef = useRef(null)
+
+  const PROJECT_GAP_PX = 80
+  // 7 tiles per cycle: 6 projects + 1 CTA tile
+  const projectsCycle = [...projects, { isCta: true }]
+  const loopCount = projectsCycle.length
+  // render 2 cycles so we can wrap seamlessly
+  const projectsLoop = [...projectsCycle, ...projectsCycle]
+
+  const getProjectStep = () => {
+    const firstCard = projectCardsRef.current?.[0]
+    if (!firstCard) return 360
+    const cardWidth = firstCard.getBoundingClientRect().width
+    return Math.round(cardWidth + 20)
+  }
+
+  const moveProjectsByButton = (direction) => {
+    const offset = projectsOffset
+    if (!offset || offset <= 0) return
+
+    const step = getProjectStep()
+    const currentX = projectsX.get()
+
+    let nextX = currentX + direction * step
+
+    if (nextX > 0) nextX -= offset
+    if (nextX <= -offset) nextX += offset
+
+    projectsX.set(nextX)
+  }
+
+
+  // Auto-scroll projects right -> left (slow)
+  const PROJECTS_AUTO_PX_PER_SEC = 18
+  const projectsLastOffsetRef = useRef(0)
+
+  useAnimationFrame((_, delta) => {
+    const offset = projectsOffset
+
+    // If nothing to scroll, keep at 0
+    if (!offset || offset <= 0) {
+      if (projectsX.get() !== 0) projectsX.set(0)
+      projectsLastOffsetRef.current = offset
+      return
+    }
+
+    // If offset changed (resize), clamp into valid range
+    if (projectsLastOffsetRef.current !== offset) {
+      const clamped = Math.min(0, Math.max(-offset, projectsX.get()))
+      projectsX.set(clamped)
+      projectsLastOffsetRef.current = offset
+    }
+
+    const moveBy = (PROJECTS_AUTO_PX_PER_SEC * delta) / 1000
+    let next = projectsX.get() - moveBy
+
+    // Loop seamlessly: when we hit the end, wrap back to start
+    if (next <= -offset) next = 0
+
+    projectsX.set(next)
+  })
+
+
+  const { scrollYProgress: heroProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'start -110vh'],
+  })
+  const heroContentScale = useTransform(heroProgress, [0, 0.22, 0.52, 0.85, 1], [1, 1, 0.8, 0.45, 0.22])
+  const heroContentOpacity = useTransform(heroProgress, [0, 0.3, 0.6, 0.85, 1], [1, 1, 0.8, 0.55, 0.25])
+  const heroContentY = useTransform(heroProgress, [0, 1], [0, -180])
+  const heroContentBlur = useTransform(heroProgress, [0, 0.5, 1], ['0px', '6px', '10px'])
+
+  useEffect(() => {
+    const computeOffset = () => {
+      const viewportWidth =
+        (projectsRef.current && projectsRef.current.getBoundingClientRect().width) || window.innerWidth
+      const pad =
+        projectsRef.current && window.getComputedStyle(projectsRef.current)
+          ? parseFloat(window.getComputedStyle(projectsRef.current).paddingLeft || '0') +
+            parseFloat(window.getComputedStyle(projectsRef.current).paddingRight || '0')
+          : 0
+      const usableWidth = Math.max(1, viewportWidth - pad)
+      const marker = projectsLoopMarkerRef.current
+      const loopWidth = marker ? marker.offsetLeft : 0
+      setProjectsOffset(Math.max(0, loopWidth))
+      const extra = Math.min(loopWidth, 500)
+      setProjectsShellHeight(window.innerHeight + extra + 10)
+    }
+    const raf = requestAnimationFrame(computeOffset)
+    window.addEventListener('resize', computeOffset)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.removeEventListener('resize', computeOffset)
+    }
+  }, [])
+
+  const handleProjectMouseMove = (event, idx) => {
+    const card = projectCardsRef.current[idx]
+    if (!card) return
+    const rect = card.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    const tiltX = ((y - rect.height / 2) / rect.height) * 8
+    const tiltY = (-(x - rect.width / 2) / rect.width) * 8
+    const glowX = (x / rect.width) * 100
+    const glowY = (y / rect.height) * 100
+    card.style.setProperty('--tiltX', `${tiltX}deg`)
+    card.style.setProperty('--tiltY', `${tiltY}deg`)
+    card.style.setProperty('--glowX', `${glowX}%`)
+    card.style.setProperty('--glowY', `${glowY}%`)
+  }
+
+  const handleProjectMouseLeave = (idx) => {
+    const card = projectCardsRef.current[idx]
+    if (!card) return
+    card.style.setProperty('--tiltX', '0deg')
+    card.style.setProperty('--tiltY', '0deg')
+    card.style.setProperty('--glowX', '50%')
+    card.style.setProperty('--glowY', '50%')
+  }
+
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 980px)')
     const handleChange = () => {
@@ -359,7 +710,7 @@ export default function App() {
           </span>
           <div>
             <p className="brand__name">Shubodaya Kumar</p>
-            <p className="brand__role">Network Engineer and NOC</p>
+            <p className="brand__role">Network Engineer</p>
           </div>
         </div>
         <button
@@ -386,9 +737,8 @@ export default function App() {
             }}
           >
             <a href="#about">About</a>
-            <a href="#experience">Experience</a>
+            <a href="#journey">My Journey</a>
             <a href="#projects">Projects</a>
-            <a href="#education">Education</a>
             <a href="#skills">Skills</a>
             <a href="#certifications">Certifications</a>
             <a href="#interests">Interests</a>
@@ -416,78 +766,56 @@ export default function App() {
       </header>
 
       <main>
-        <section className="hero" id="home" style={{ '--hero-bg': `url(${heroBg})` }}>
-          <div className="hero__content" data-reveal>
-            <p className="eyebrow">Plymouth, England | Relocation open</p>
+        <section
+          className={`hero hero--step-${heroStep}`}
+          id="home"
+          style={{ '--hero-bg': `url(${heroBg})` }}
+          ref={heroRef}
+        >
+          <motion.div
+            className="hero__pin"
+            style={{
+              scale: heroContentScale,
+              opacity: heroContentOpacity,
+              y: heroContentY,
+              filter: heroContentBlur,
+              transformOrigin: 'center center',
+            }}
+          >
+          <motion.div
+            className="hero__content"
+            data-reveal
+            ref={(el) => (heroStepRefs.current[0] = el)}
+          >
+            <p className="eyebrow">Available for work</p>
             <h1>
               Network Engineer
               <span className="hero__title-accent">Building reliable, scalable networks</span>
             </h1>
-            <p className="hero__lead">
-              Network Engineer with 3+ years of enterprise experience supporting on-prem and
-              cloud networks. Strong in IP routing, firewalls, Linux, and automation
-              (Python/Ansible), and ready to contribute immediately within NOC and network
-              engineering teams.
-            </p>
-            <p className="hero__lead">
-              I focus on keeping services stable and users connected through hands-on LAN/WAN
-              troubleshooting, routing and switching, VPNs, and proactive monitoring across
-              multi-site environments.
-            </p>
-            <div className="hero__actions">
-              <a className="button button--bright" href="#contact">
-                Start a conversation
-              </a>
-              <a className="button button--ghost" href="https://github.com/shubodaya">
-                GitHub Projects
-              </a>
-            </div>
-            <div className="hero__details">
-              <div>
-                <p className="label">
-                  <span className="icon-circle icon-circle--small" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" role="img">
-                      <path
-                        d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm0 2v.3l8 5 8-5V7H4zm16 10V9.7l-7.4 4.6a1 1 0 0 1-1.2 0L4 9.7V17h16z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </span>
-                  Email
+            <div className="hero__quotes">
+              <div className="hero__quote">
+                <span className="hero__quote-mark" aria-hidden="true">"</span>
+                <p className="hero__lead">
+                  “Most security failures show up first as strange network behavior. If you are watching the wire closely, the network will tell you the story.”
+                  <br />
+                  <span className="quote-attrib">— Paul Vixie</span>
                 </p>
-                <p>hnshubodaya@gmail.com</p>
               </div>
-              <div>
-                <p className="label">
-                  <span className="icon-circle icon-circle--small" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" role="img">
-                      <path
-                        d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24c1.1.36 2.3.56 3.6.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.8 21 3 14.2 3 6a1 1 0 0 1 1-1h3.2a1 1 0 0 1 1 1c0 1.3.2 2.5.56 3.6a1 1 0 0 1-.24 1l-1.92 1.92z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </span>
-                  Phone
+              <div className="hero__quote">
+                <span className="hero__quote-mark" aria-hidden="true">"</span>
+                <p className="hero__lead">
+                  “The Internet is a collection of networks that agree to speak the same language.”
+                  <br />
+                  <span className="quote-attrib">— Vint Cerf</span>
                 </p>
-                <p>+44 7436301739</p>
-              </div>
-              <div>
-                <p className="label">
-                  <span className="icon-circle icon-circle--small" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" role="img">
-                      <path
-                        d="M12 2c-3.86 0-7 3.14-7 7 0 5.25 7 13 7 13s7-7.75 7-13c0-3.86-3.14-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </span>
-                  Location
-                </p>
-                <p>Plymouth, England (Open to relocate)</p>
               </div>
             </div>
-          </div>
-          <div className="hero__visual" data-reveal>
+          </motion.div>
+          <motion.div
+            className="hero__visual"
+            data-reveal
+            ref={(el) => (heroStepRefs.current[1] = el)}
+          >
             <div className="noc-panel">
               <div className="noc-panel__header">NOC Live Feed</div>
               <div
@@ -515,168 +843,92 @@ export default function App() {
                 </div>
               </div>
             </div>
-            <div className="noc-kpis">
-              <div className="noc-kpi">
-                <p className="noc-kpi__label">Uptime</p>
-                <p className="noc-kpi__value">99.98%</p>
-              </div>
-              <div className="noc-kpi">
-                <p className="noc-kpi__label">Active Incidents</p>
-                <p className="noc-kpi__value">3</p>
-              </div>
-              <div className="noc-kpi">
-                <p className="noc-kpi__label">Open Tickets</p>
-                <p className="noc-kpi__value">12</p>
-              </div>
-              <div className="noc-kpi">
-                <p className="noc-kpi__label">MTTR</p>
-                <p className="noc-kpi__value">38m</p>
-              </div>
+            <div className="noc-kpis" data-reveal>
+              {nocMetrics.map((metric) => (
+                <div className="noc-kpi" key={metric.label}>
+                  <p className="noc-kpi__label">{metric.label}</p>
+                  <p className="noc-kpi__value">{metric.value}</p>
+                </div>
+              ))}
             </div>
-            <div className="hero__card">
-              <p className="card-title">Network Operations Focus</p>
-              <div className="skill-bars">
-                <div className="skill-bar">
-                  <div className="skill-bar__label">
-                    <span>Routing &amp; Switching</span>
-                    <span>94%</span>
-                  </div>
-                  <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '94%', '--delay': '0.1s' }} />
-                  </div>
-                </div>
-                <div className="skill-bar">
-                  <div className="skill-bar__label">
-                    <span>LAN/WAN Operations</span>
-                    <span>90%</span>
-                  </div>
-                  <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '90%', '--delay': '0.3s' }} />
-                  </div>
-                </div>
-                <div className="skill-bar">
-                  <div className="skill-bar__label">
-                    <span>Network Monitoring</span>
-                    <span>88%</span>
-                  </div>
-                  <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '88%', '--delay': '0.5s' }} />
-                  </div>
-                </div>
-                <div className="skill-bar">
-                  <div className="skill-bar__label">
-                    <span>Incident Troubleshooting</span>
-                    <span>91%</span>
-                  </div>
-                  <div className="skill-bar__track">
-                    <div className="skill-bar__fill" style={{ '--fill': '91%', '--delay': '0.7s' }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          </motion.div>
+          </motion.div>
         </section>
 
-        <section className="section" id="about">
-          <div className="section__header" data-reveal>
-            <p className="eyebrow">About</p>
-            <h2>Mission-driven networking, grounded in operations</h2>
+        <section className="section section--profile" id="about">
+          <div className="profile__intro" data-reveal>
+            <div className="profile__meta profile__meta--aligned">
+              <div className="profile__meta-left">
+                <div className="profile__left-row">
+                  <span className="profile__status-dot" aria-hidden="true" />
+                  <span className="profile__status">MSc Cybersecurity</span>
+                </div>
+              </div>
+              <div className="profile__meta-center">
+                <div className="profile__role-line">
+                  <p className="profile__role profile__role--center">Network Engineer</p>
+                </div>
+              </div>
+              <div className="profile__meta-right">
+                <div className="profile__location-row">
+                  <span className="profile__bullet" aria-hidden="true" />
+                  <span className="profile__location">Plymouth, England</span>
+                </div>
+                <span className="profile__relocation">Open to relocation</span>
+              </div>
+            </div>
+            <h2 className="profile__name">Shubodaya Kumar</h2>
+            <p className="profile__summary">
+              I approach network engineering with a reliability-first mindset, where availability, security,
+              and continuity are non-negotiable, because networks are only valuable when they can be trusted.
+            </p>
           </div>
-          <div className="about">
-            <div className="about__copy" data-reveal>
-              <p>
-                I bring energy, ownership, and consistency to everything I work on. I am the
-                kind of person who enjoys digging into problems, learning something new every
-                day, and making systems better than I found them. Networking, for me, is a
-                craft I am genuinely invested in.
-              </p>
-              <p>
-                With experience across 24x7 enterprise environments and cloud platforms, I
-                am comfortable working under pressure and communicating clearly when it
-                matters most. My engineering background gives me a strong technical base, but
-                it is my curiosity, work ethic, and follow-through that make me a reliable
-                asset to a team.
-              </p>
-              <p>
-                I am friendly, easy to work with, and proactive by nature. Whether
-                collaborating with engineers, supporting users, or resolving outages,
-                I bring focus, accountability, and a genuine desire to contribute. I am
-                motivated by impact, and I take pride in being someone teams can trust and
-                depend on.
-              </p>
-              <div className="about__chips">
-                <span>Network Engineer</span>
-                <span>NOC Ready</span>
-                <span>Routing &amp; Switching</span>
-                <span>Automation Focused</span>
-              </div>
-              <div className="about__cta">
-                <a
-                  className="button button--bright"
-                  href="https://docs.google.com/document/d/1N6X1tBwe-eXPUuUK0vc0NTwg8Dh3R3O_Y8Vla9vN9t4/edit?usp=sharing"
-                >
-                  Resume
-                </a>
-              </div>
+
+          <div className="profile__ticker" data-reveal>
+            <ParallaxText baseVelocity={-1.5} items={networkTicker} />
+            <ParallaxText baseVelocity={1.5} items={networkTicker} />
+          </div>
+
+          <div className="profile__visuals" data-reveal>
+            <div className="about__image">
+              <img src={networkTopology} alt="Network topology overview" />
             </div>
-            <div className="about__grid" data-reveal>
-              <div className="metric">
-                <p className="metric__value">3+ years</p>
-                <p className="metric__label">Enterprise support experience</p>
-              </div>
-              <div className="metric">
-                <p className="metric__value">25+</p>
-                <p className="metric__label">Incidents resolved in the field</p>
-              </div>
-              <div className="metric">
-                <p className="metric__value">20+</p>
-                <p className="metric__label">Knowledge base articles authored</p>
-              </div>
-              <div className="metric">
-                <p className="metric__value">3</p>
-                <p className="metric__label">Spot awards for operational impact</p>
-              </div>
-            </div>
-            <div className="about__visuals" data-reveal>
-              <div className="about__image">
-                <img src={networkTopology} alt="Network topology overview" />
-              </div>
-              <div className="hero__terminal hero__terminal--about">
-                <div className="hero__terminal-header">cli@router:~</div>
-                <div className="hero__terminal-body">
-                  <span className="typing-line" style={{ '--delay': '0s' }}>
-                    <span className="terminal-prompt">Router#</span> conf t
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '0.8s' }}>
-                    <span className="terminal-prompt">Router(config)#</span> access-list 101 deny ip host 10.20.30.14 any
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '1.6s' }}>
-                    <span className="terminal-prompt">Router(config)#</span> access-list 101 permit ip any any
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '2.4s' }}>
-                    <span className="terminal-prompt">Router(config)#</span> interface g0/0
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '3.2s' }}>
-                    <span className="terminal-prompt">Router(config-if)#</span> ip access-group 101 in
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '4s' }}>
-                    <span className="terminal-prompt">Router(config)#</span> ip nat inside source list 101 interface g0/1 overload
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '4.8s' }}>
-                    <span className="terminal-prompt">Router(config)#</span> router ospf 10
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '5.6s' }}>
-                    <span className="terminal-prompt">Router(config-router)#</span> network 10.20.30.0 0.0.0.255 area 0
-                  </span>
-                  <span className="typing-line" style={{ '--delay': '6.6s' }}>
-                    <span className="terminal-prompt">Router#</span> show ip ospf neighbor
-                  </span>
-                  <span className="terminal-line terminal-line--persist" style={{ '--delay': '7.4s' }}>
-                    Neighbor ID     Pri   State           Dead Time   Address         Interface   RXmtL RqstL DBsmL
-                  </span>
-                  <span className="terminal-line terminal-line--persist" style={{ '--delay': '8s' }}>
-                    1.1.1.1           1   FULL/ -         00:00:32    10.20.30.1      Gi0/0       0     0     0
-                  </span>
+            <div className="hero__terminal hero__terminal--about">
+              <div className="hero__terminal-header">cli@router:~</div>
+              <div className="hero__terminal-body">
+                <span className="typing-line" style={{ '--delay': '0s' }}>
+                  <span className="terminal-prompt">Router#</span> conf t
+                </span>
+                <span className="typing-line" style={{ '--delay': '0.8s' }}>
+                  <span className="terminal-prompt">Router(config)#</span> access-list 101 deny ip host 10.20.30.14 any
+                </span>
+                <span className="typing-line" style={{ '--delay': '1.6s' }}>
+                  <span className="terminal-prompt">Router(config)#</span> access-list 101 permit ip any any
+                </span>
+                <span className="typing-line" style={{ '--delay': '2.4s' }}>
+                  <span className="terminal-prompt">Router(config)#</span> interface g0/0
+                </span>
+                <span className="typing-line" style={{ '--delay': '3.2s' }}>
+                  <span className="terminal-prompt">Router(config-if)#</span> ip access-group 101 in
+                </span>
+                <span className="typing-line" style={{ '--delay': '4s' }}>
+                  <span className="terminal-prompt">Router(config)#</span> ip nat inside source list 101 interface g0/1 overload
+                </span>
+                <span className="typing-line" style={{ '--delay': '4.8s' }}>
+                  <span className="terminal-prompt">Router(config)#</span> router ospf 10
+                </span>
+                <span className="typing-line" style={{ '--delay': '5.6s' }}>
+                  <span className="terminal-prompt">Router(config-router)#</span> network 10.20.30.0 0.0.0.255 area 0
+                </span>
+                <span className="typing-line" style={{ '--delay': '6.6s' }}>
+                  <span className="terminal-prompt">Router#</span> show ip ospf neighbor
+                </span>
+                <span className="terminal-line terminal-line--persist" style={{ '--delay': '7.4s' }}>
+                  Neighbor ID     Pri   State           Dead Time   Address         Interface   RXmtL RqstL DBsmL
+                </span>
+                <span className="terminal-line terminal-line--persist" style={{ '--delay': '8s' }}>
+                  1.1.1.1           1   FULL/ -         00:00:32    10.20.30.1      Gi0/0       0     0     0
+                </span>
                 <span className="terminal-line terminal-line--persist" style={{ '--delay': '8.6s' }}>
                   2.2.2.2           1   FULL/ -         00:00:34    10.20.30.2      Gi0/0       0     0     0
                 </span>
@@ -716,148 +968,266 @@ export default function App() {
                 )}
               </div>
             </div>
-            </div>
           </div>
         </section>
 
         <section
           className="section section--with-bg"
-          id="experience"
+          id="journey"
           style={{ backgroundImage: `url(${networkNodes})` }}
         >
           <div className="section__header" data-reveal>
-            <p className="eyebrow">Experience</p>
-            <h2>Experience</h2>
-            <p className="section__note">
-              Enterprise network support across routing, switching, VPNs, and NOC escalations.
-            </p>
+            <p className="eyebrow">My Journey</p>
+            <h2>THE STORY SO FAR</h2>
           </div>
-          <div className="timeline">
-            {experience.map((role) => (
-              <article className="timeline__item" key={role.role} data-reveal>
-                <div className="timeline__details">
-                  <div className="timeline__meta">
-                    <p className="timeline__date">{role.dates}</p>
-                    <h3>{role.role}</h3>
-                    <div className="timeline__company">
-                      <span>{role.company}</span>
-                      <span>{role.location}</span>
-                    </div>
-                    <div className="timeline__tags">
-                      {role.tags.map((tag) => (
-                        <span key={tag}>{tag}</span>
-                      ))}
-                    </div>
+          <div className="experience-carousel" data-reveal>
+            <div className="experience-controls">
+              <button className="pill-btn" type="button" onClick={goPrevExperience} aria-label="Previous role">
+                ‹
+              </button>
+              <div className="experience-bars">
+                {experience.map((_, idx) => (
+                  <button
+                    key={_.role}
+                    type="button"
+                    className="experience-bar"
+                    onClick={() => goToExperience(idx)}
+                    aria-label={`Jump to ${_.role}`}
+                  >
+                    <span
+                      className="experience-bar__fill"
+                      style={{
+                        width:
+                          idx === activeExperienceIndex
+                            ? `${expProgress}%`
+                            : idx < activeExperienceIndex
+                            ? '100%'
+                            : '0%',
+                      }}
+                    />
+                  </button>
+                ))}
+              </div>
+              <button className="pill-btn" type="button" onClick={goNextExperience} aria-label="Next role">
+                ›
+              </button>
+            </div>
+            <div className="experience-stage">
+              <AnimatePresence mode="wait">
+                <motion.article
+                  key={experience[activeExperienceIndex].role}
+                  className="experience-card"
+                  initial={{ opacity: 0, y: 26 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -26 }}
+                  transition={{ duration: 0.4, ease: [0.25, 0.8, 0.4, 1] }}
+                  whileHover={{ scale: 1.01, boxShadow: '0 24px 60px rgba(0,0,0,0.45)' }}
+                >
+                  <motion.header className="experience-card__header" variants={expGroupVariants} initial="hidden" animate="show">
+                    <motion.div variants={expItemVariants}>
+                      <p className="experience-card__date">{experience[activeExperienceIndex].dates}</p>
+                      <h3>{experience[activeExperienceIndex].role}</h3>
+                      <div className="experience-card__company">
+                        <span>{experience[activeExperienceIndex].company}</span>
+                        <span>{experience[activeExperienceIndex].location}</span>
+                      </div>
+                      <div className="experience-card__tags">
+                        {experience[activeExperienceIndex].tags.map((tag) => (
+                          <span key={tag}>{tag}</span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </motion.header>
+                  <div className="experience-card__body">
+                    <motion.div variants={expGroupVariants} initial="hidden" animate="show">
+                      <p className="experience-card__section-title">Highlights</p>
+                      <motion.ul variants={expGroupVariants}>
+                        {experience[activeExperienceIndex].highlights.map((item) => (
+                          <motion.li key={item} variants={expItemVariants}>
+                            {item}
+                          </motion.li>
+                        ))}
+                      </motion.ul>
+                    </motion.div>
+                    <motion.div className="experience-card__panel" variants={expGroupVariants} initial="hidden" animate="show">
+                      <p className="experience-card__section-title">Key Achievements</p>
+                      <motion.ul variants={expGroupVariants}>
+                        {experience[activeExperienceIndex].achievements.map((item) => (
+                          <motion.li key={item} variants={expItemVariants}>
+                            {item}
+                          </motion.li>
+                        ))}
+                      </motion.ul>
+                    </motion.div>
                   </div>
-                  <ul>
-                    {role.highlights.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-                <aside className="timeline__achievements">
-                  <p className="timeline__achievements-title">Key Achievements</p>
-                  <ul>
-                    {role.achievements.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                </aside>
-              </article>
-            ))}
+                  <div className="experience-card__glow" aria-hidden />
+                  <div className="experience-card__shine" aria-hidden />
+                </motion.article>
+              </AnimatePresence>
+            </div>
           </div>
         </section>
 
+        <div className="hero-step-sentinel" aria-hidden ref={(el) => (heroStepRefs.current[2] = el)} />
+
         <section
-          className="section section--with-bg"
+          className="section section--with-bg projects-fixed"
           id="projects"
           style={{ '--section-bg': `url(${vscodePython})` }}
+          ref={projectsRef}
         >
-          <div className="section__header" data-reveal>
-            <p className="eyebrow">Projects</p>
-            <h2>Hands-on labs, network builds, and automation</h2>
-            <p className="section__note">
-              I build networks that mirror real deployments, then validate performance,
-              resilience, and operational readiness.
-            </p>
-          </div>
-          <div className="project-grid">
-            {projects.map((project) => (
-              <article className="project-card" key={project.title} data-reveal>
-                <p className="project-card__year">{project.year}</p>
-                <h3>{project.title}</h3>
-                <p>{project.detail}</p>
-              </article>
-            ))}
-            <div className="project-card project-card--cta" data-reveal>
-              <p className="project-card__year">More</p>
-              <h3>Explore on GitHub</h3>
-              <p>See more hands-on labs and automation work.</p>
-              <a className="button button--ghost" href="https://github.com/shubodaya?tab=repositories">
-                Explore more on GitHub
-              </a>
+          <div
+            className="projects-shell"
+          >
+            <div className="projects-sticky">
+              <div className="section__header projects-header">
+                <div className="projects-header__row">
+                  <div>
+                    <p className="eyebrow">Featured Work</p>
+                    <h2>FEATURED PROJECTS</h2>
+                  </div>
+
+                  <div className="projects-nav">
+                    <button
+                      type="button"
+                      className="projects-nav__btn"
+                      aria-label="Previous projects"
+                      onClick={() => moveProjectsByButton(1)}
+                    >
+                      ‹
+                    </button>
+                    <button
+                      type="button"
+                      className="projects-nav__btn"
+                      aria-label="Next projects"
+                      onClick={() => moveProjectsByButton(-1)}
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+
+              <motion.div
+                className="project-grid"
+                variants={projectGroupVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.2 }}
+                style={{ x: projectsX }}
+                ref={projectGridRef}
+              >
+                {projectsLoop.map((item, idx) => {
+                  const isGap = idx === loopCount
+
+                  if (isGap) {
+                    return (
+                      <div
+                        key="projects-loop-gap"
+                        ref={projectsLoopMarkerRef}
+                        style={{ width: `${PROJECT_GAP_PX}px`, flex: '0 0 auto' }}
+                      />
+                    )
+                  }
+
+                  if (item.isCta) {
+                    return (
+                      <motion.div
+                        className="project-card project-card--cta"
+                        key={`cta-${idx}`}
+                        variants={projectItemVariants}
+                        whileHover={{ scale: 1.02, translateY: -6 }}
+                      >
+                        <span className="project-card__index">∞</span>
+                        <p className="project-card__year">More</p>
+                        <h3>Explore on GitHub</h3>
+                        <p>See more hands-on labs and automation work.</p>
+                        <a className="button button--ghost" href="https://github.com/shubodaya?tab=repositories">
+                          Explore more on GitHub
+                        </a>
+                      </motion.div>
+                    )
+                  }
+
+                  // normal project card
+                  const project = item
+                  const indexInCycle = idx % loopCount // 0..6, where 6 would be CTA (but handled above)
+                  const displayIndex = Math.min(indexInCycle + 1, projects.length) // 1..6 for projects
+
+                  return (
+                    <motion.article
+                      className="project-card"
+                      key={`${project.title}-${idx}`}
+                      variants={projectItemVariants}
+                      whileHover={{ scale: 1.02, translateY: -6 }}
+                      ref={(el) => (projectCardsRef.current[idx] = el)}
+                      onMouseMove={(e) => handleProjectMouseMove(e, idx)}
+                      onMouseLeave={() => handleProjectMouseLeave(idx)}
+                    >
+                      <span className="project-card__index">{String((idx % projects.length) + 1).padStart(2, '0')}</span>
+                      <p className="project-card__year">{project.year}</p>
+                      <h3>{project.title}</h3>
+                      <p>{project.detail}</p>
+                    </motion.article>
+                  )
+                })}
+                <motion.div
+                  className="project-card project-card--cta"
+                  variants={projectItemVariants}
+                  whileHover={{ scale: 1.02, translateY: -6 }}
+                >
+                  <span className="project-card__index">∞</span>
+                  <p className="project-card__year">More</p>
+                  <h3>Explore on GitHub</h3>
+                  <p>See more hands-on labs and automation work.</p>
+                  <a className="button button--ghost" href="https://github.com/shubodaya?tab=repositories">
+                    Explore more on GitHub
+                  </a>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         </section>
 
         <section
-          className="section section--with-bg"
-          id="education"
-          style={{ backgroundImage: `url(${educationCap})` }}
-        >
-          <div className="section__header" data-reveal>
-            <p className="eyebrow">Education</p>
-            <h2>Education</h2>
-          </div>
-          <div className="edu-grid">
-            <article data-reveal>
-              <h3>MSc in Cybersecurity (NCSC Certified)</h3>
-              <div className="edu-meta">
-                <span>Swansea University</span>
-                <span>Distinction</span>
-              </div>
-              <p className="edu-dates">
-                <span>Sep 2023 - Dec 2024</span>
-                <span>Swansea, Wales, UK</span>
-              </p>
-            </article>
-            <article data-reveal>
-              <h3>BEng in Electronics and Communication</h3>
-              <div className="edu-meta">
-                <span>Vidya Vardhaka College</span>
-                <span>First Class</span>
-              </div>
-              <p className="edu-dates">
-                <span>Jul 2016 - Aug 2020</span>
-                <span>Mysore, India</span>
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section
-          className="section section--with-bg"
+          className="section section--with-bg tech-section"
           id="skills"
           style={{ '--section-bg': `url(${socImage})` }}
         >
           <div className="section__header" data-reveal>
-            <p className="eyebrow">Skills</p>
-            <h2>Networking-first tooling with a reliability mindset</h2>
+            <p className="eyebrow">Tech</p>
+            <h2>NETWORKING TOOLS I RELY ON</h2>
             <p className="section__note">
-              I bring hands-on expertise across routing, monitoring, connectivity, and
-              automation.
+              Core platforms, protocols, and automations I use to keep networks reliable, secure, and observable.
             </p>
           </div>
-          <div className="skills-grid">
-            {skills.map((skillGroup) => (
-              <article className="skill-card" key={skillGroup.label} data-reveal>
-                <h3>{skillGroup.label}</h3>
-                <div className="chip-group">
-                  {skillGroup.items.map((item) => (
-                    <span key={item}>{item}</span>
+          <div className="tech-grid">
+            {[
+              { title: 'Routing & Switching', items: ['OSPF/BGP', 'STP/LACP', 'VLANs/VRRP', 'QoS', 'MSTP'] },
+              { title: 'Network Security', items: ['Firewalls', 'NAT/ACL', 'SSL/IPSec VPN', 'WAF', 'Zero Trust'] },
+              { title: 'Cloud Networking', items: ['Azure VNets', 'VPC Peering', 'Transit/Hub-Spoke', 'ExpressRoute/S2S', 'Sentinel'] },
+              { title: 'Monitoring & Observability', items: ['PRTG', 'Syslog/SNMP', 'NetFlow', 'Wireshark', 'SIEM Dashboards'] },
+              { title: 'Automation & SRE', items: ['Ansible', 'Python', 'REST APIs', 'GitOps', 'ITSM Workflows'] },
+              { title: 'Identity & Access', items: ['AD/Azure AD', 'LDAP/RADIUS', 'MFA', '802.1X/WLAN', 'Role-based Access'] },
+            ].map((card, idx) => (
+              <motion.article
+                key={card.title}
+                className="tech-card"
+                whileHover={{ y: -8, scale: 1.01 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+              >
+                <div className="tech-card__glow" aria-hidden />
+                <header className="tech-card__header">
+                  <span className="tech-card__index">{String(idx + 1).padStart(2, '0')}</span>
+                  <h3>{card.title}</h3>
+                </header>
+                <ul className="tech-card__list">
+                  {card.items.map((item) => (
+                    <li key={item}>{item}</li>
                   ))}
-                </div>
-              </article>
+                </ul>
+              </motion.article>
             ))}
           </div>
         </section>
@@ -869,7 +1239,7 @@ export default function App() {
         >
           <div className="section__header" data-reveal>
             <p className="eyebrow">Certifications</p>
-            <h2>Certifications</h2>
+            <h2>CERTIFICATIONS</h2>
           </div>
           <div className="cert-grid">
             <ul className="cert-list" data-reveal>
@@ -929,7 +1299,7 @@ export default function App() {
         <section className="section" id="interests">
           <div className="section__header" data-reveal>
             <p className="eyebrow">Interests</p>
-            <h2>Creative energy outside the NOC</h2>
+            <h2>CREATIVE ENERGY OUTSIDE THE NOC</h2>
           </div>
           <div className="interest-grid">
             <div data-reveal>
@@ -955,7 +1325,7 @@ export default function App() {
           >
             <div className="section__header" data-reveal>
               <p className="eyebrow">Contact</p>
-              <h2>Let us build a stronger network together</h2>
+              <h2>LET US BUILD A STRONGER NETWORK TOGETHER</h2>
             </div>
             <div className="contact__grid">
               <div className="contact__cards" data-reveal>
