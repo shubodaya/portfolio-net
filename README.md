@@ -1,101 +1,88 @@
-# Portfolio Website – Network Engineer
+# Network Engineer Portfolio
 
-A modern, interactive personal portfolio built to showcase my experience as a **Network Engineer**, combining clean UI design with advanced front-end animations and real-world networking themes.
+This repository hosts my personal **portfolio website**, designed to showcase my experience, projects, and technical capabilities as a **Network Engineer**.
 
-Built for **network teams, recruiters, and engineering partners**, this portfolio highlights hands-on labs, operational experience, and technical depth in a clear and engaging way.
+The portfolio is built with a strong focus on **real-world networking, NOC operations, and infrastructure reliability**, presented through an interactive and modern web interface.
+
+This repository is intended for **recruiters, hiring managers, and engineering collaborators** to review my work and background.
 
 ---
 
-## ✨ Features
+## 👨‍💻 About This Portfolio
 
-- **Hero section with live NOC-style feed**
-  - Animated logs simulating real network events
-  - KPI cards for uptime, incidents, MTTR, and tickets
-- **Infinite scrolling Projects section**
-  - Seamless horizontal loop of project tiles
-  - Projects repeat continuously with a visual gap between cycles
-  - Manual navigation buttons with smooth motion
-- **Interactive project cards**
-  - Hover tilt and glow effects
-  - Correct project numbering that resets on every loop
+The portfolio highlights:
+- Professional experience in **network operations and support**
+- Hands-on **networking, security, and automation projects**
+- Practical exposure to **NOC environments and incident handling**
+- A clean, structured presentation of technical skills
+
+The design and interactions are inspired by **real network operations dashboards**, rather than generic portfolio layouts.
+
+---
+
+## ✨ Key Highlights
+
+- **Live NOC-style hero section**
+  - Simulated network logs and KPIs
+  - Visual representation of uptime, incidents, and monitoring
+- **Projects showcase**
+  - Horizontally scrolling project tiles
+  - Seamless infinite loop with clear project numbering
+  - Focus on labs, automation, and applied networking work
 - **Experience timeline**
-  - Auto-advancing carousel with progress indicators
-  - Manual navigation support
-- **Responsive & accessible**
-  - Optimized for desktop and mobile
-  - Keyboard-friendly controls
-- **Performance-focused**
-  - Smooth animations using requestAnimationFrame
-  - Minimal re-renders for better performance
+  - Clearly structured career and academic journey
+  - Emphasis on operational responsibilities and impact
+- **Interactive UI**
+  - Subtle animations and hover effects
+  - Built for clarity, not distraction
+- **Responsive design**
+  - Optimized for desktop and mobile viewing
 
 ---
 
-## 🛠 Tech Stack
+## 🛠 Technologies Used
 
 - **React**
 - **Vite**
 - **Framer Motion**
-- **CSS (custom, no UI frameworks)**
 - **JavaScript (ES6+)**
+- **Custom CSS**
+
+No UI frameworks were used. All layouts and animations are custom-built to maintain full control and performance.
 
 ---
 
-## 📂 Project Structure
+## 📁 Repository Purpose
 
-```
-src/
-├── assets/              # Images, icons, backgrounds
-├── App.jsx              # Main application logic
-├── main.jsx             # App entry point
-├── styles.css           # Global and component styles
-└── index.html
-```
+This repository exists to:
+- Host the source code for my portfolio
+- Provide transparency into how the portfolio is built
+- Demonstrate front-end engineering discipline alongside networking expertise
+
+It is **not intended as a template or starter project**.
 
 ---
 
-## 🔁 Infinite Projects Loop (How it Works)
+## 🌐 Live Portfolio
 
-- Projects are rendered in **two identical cycles**
-- A spacer element creates a visible gap between cycles
-- Scroll position is wrapped using a calculated loop width
-- Ensures:
-  - No visual jump
-  - No missing first or last tile
-  - Correct project numbering on every cycle
-
-This approach allows the Projects section to scroll endlessly while remaining smooth and predictable.
-
----
-
-## 🚀 Getting Started Locally
-
-```bash
-git clone https://github.com/shubodaya/portfolio-net.git
-cd portfolio-net
-npm install
-npm run dev
-```
-
-The app will be available at:
-
-```
-http://localhost:5173
-```
+👉 **Portfolio Website:** https://shubodaya.github.io/portfolio-net/
 
 ---
 
 ## 📬 Contact
 
-Built for network teams, recruiters, and engineering partners.
+If you would like to discuss my experience, projects, or potential opportunities, feel free to reach out.
 
-- **Email:** hnshubodaya@gmail.com
-- **GitHub:** https://github.com/shubodaya
-- **LinkedIn:** https://www.linkedin.com/in/shubodaya/
+- **Email:** hnshubodaya@gmail.com  
+- **LinkedIn:** https://www.linkedin.com/in/shubodaya  
+- **GitHub:** https://github.com/shubodaya  
 
 ---
 
-## 📌 Notes
+## 📌 Notes for Reviewers
 
-- This project is intentionally framework-light to maintain control over performance and animations.
-- Visual elements are inspired by NOC environments, monitoring dashboards, and real-world network operations.
-- The codebase prioritizes clarity and maintainability over heavy abstraction.
+- The portfolio emphasizes **practical networking skills**, not just UI design.
+- Animations and interactions are intentionally subtle and performance-conscious.
+- Project descriptions focus on **what was built, why it was built, and what problem it solved**.
+
+Thank you for taking the time to review my portfolio.
