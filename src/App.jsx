@@ -1108,7 +1108,6 @@ export default function App() {
                 </div>
               </div>
 
-
               <motion.div
                 className="project-grid"
                 variants={projectGroupVariants}

@@ -1676,7 +1676,6 @@ img {
     0 12px 28px rgba(0, 240, 200, 0.18);
 }
 
-
 .edu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
