@@ -1,4 +1,4 @@
-# Network Engineer Portfolio
+# Shubodaya Kumar - Network Engineer Portfolio
 
 This repository hosts my personal **portfolio website**, designed to showcase my experience, projects, and technical capabilities as a **Network Engineer**.
 
