@@ -6,6 +6,14 @@ The portfolio is built with a strong focus on **real-world networking, NOC opera
 
 This repository is intended for **recruiters, hiring managers, and engineering collaborators** to review my work and background.
 
+![Portfolio Landing Page](https://raw.githubusercontent.com/shubodaya/portfolio-net/main/net-portf.png)
+
+---
+
+## 🌐 Live Portfolio
+
+👉 **Portfolio Website:** https://shubodaya.github.io/portfolio-net/
+
 ---
 
 ## 👨‍💻 About This Portfolio
@@ -61,11 +69,7 @@ This repository exists to:
 
 It is **not intended as a template or starter project**.
 
----
 
-## 🌐 Live Portfolio
-
-👉 **Portfolio Website:** https://shubodaya.github.io/portfolio-net/
 
 ---
 
