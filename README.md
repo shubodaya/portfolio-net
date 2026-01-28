@@ -1,12 +1,14 @@
 # Shubodaya Kumar - Network Engineer Portfolio
 
+![Portfolio Landing Page](https://raw.githubusercontent.com/shubodaya/portfolio-net/main/net-portf.png)
+
 This repository hosts my personal **portfolio website**, designed to showcase my experience, projects, and technical capabilities as a **Network Engineer**.
 
 The portfolio is built with a strong focus on **real-world networking, NOC operations, and infrastructure reliability**, presented through an interactive and modern web interface.
 
 This repository is intended for **recruiters, hiring managers, and engineering collaborators** to review my work and background.
 
-![Portfolio Landing Page](https://raw.githubusercontent.com/shubodaya/portfolio-net/main/net-portf.png)
+
 
 ---
 
