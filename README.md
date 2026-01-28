@@ -89,5 +89,4 @@ If you would like to discuss my experience, projects, or potential opportunities
 - Animations and interactions are intentionally subtle and performance-conscious.
 - Project descriptions focus on **what was built, why it was built, and what problem it solved**.
 
-Thank you for taking the time to review my portfolio.
->>>>>>> 9204309b1ed1c9d2e89eedd00415d61b2cadb623
+Thank you for taking the time to view my portfolio.
